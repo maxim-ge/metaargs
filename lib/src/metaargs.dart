@@ -19,6 +19,18 @@ abstract interface class ArgsParser {
   Result<Cmd, ParseError> parse(MetaArgs m, List<String> args);
 }
 
+// ## Run
+
+// Handler for a leaf command. May be sync (`void`) or async (`Future<void>`);
+// the runner awaits the return. Throw to signal failure.
+typedef Run =
+    FutureOr<void> Function(
+      MetaArgs m,
+      MetaCmdLeaf mc,
+      ParsedArgs args,
+      ParsedOptions options,
+    );
+
 // ## ParseError
 
 sealed class ParseError {}
@@ -105,13 +117,7 @@ final class MetaCmdLeaf extends MetaCmd {
   // `void` for sync work or `Future<void>` for async; the runner awaits it.
   // Throw to signal failure - the runner translates exceptions into a
   // non-zero exit code.
-  final FutureOr<void> Function(
-    MetaArgs m,
-    MetaCmdLeaf mc,
-    ParsedArgs args,
-    ParsedOptions options,
-  )
-  run;
+  final Run run;
   MetaCmdLeaf(super.name, super.hint, super.help, this.options, this.run);
 }
 

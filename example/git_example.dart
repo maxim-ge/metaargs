@@ -13,10 +13,7 @@
 
 import 'dart:io';
 
-import 'package:metaargs/src/metaargs.dart';
-import 'package:metaargs/src/metaargs_builder.dart';
-import 'package:metaargs/src/metaargs_help.dart';
-import 'package:metaargs/src/metaargs_runner.dart';
+import 'package:metaargs/metaargs.dart';
 
 const verboseOptKey = OptionKey<bool>('verbose');
 const messageOptKey = OptionKey<String>('message');

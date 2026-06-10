@@ -1,17 +1,5 @@
-import 'dart:async';
-
 import 'metaargs.dart';
 import 'result.dart';
-
-// Handler for a leaf command. May be sync (`void`) or async (`Future<void>`);
-// the runner awaits the return. Throw to signal failure.
-typedef Run =
-    FutureOr<void> Function(
-      MetaArgs m,
-      MetaCmdLeaf mc,
-      ParsedArgs args,
-      ParsedOptions options,
-    );
 
 // Entry point: build an immutable [Meta] tree via a closure DSL.
 // [name] is the program name (e.g. "mycli"); must be non-empty. [hint] is a

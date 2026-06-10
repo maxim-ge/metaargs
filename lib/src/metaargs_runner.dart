@@ -14,13 +14,13 @@ const int _exitOk = 0;
 const int _exitFailure = 1;
 const int _exitUsage = 64;
 
-// Sinks for stdout/stderr; injected so tests can capture output without
-// touching the real process streams.
-typedef WriteLn = void Function(String line);
+// Output sink used by the runner to emit lines to stdout/stderr; injected so
+// tests can capture output without touching the real process streams.
+typedef _WriteLn = void Function(String line);
 
 // Run a [Meta] tree against an argv vector.
 //
-// Resolves the leaf via [ArgsParser.parse], invokes its handler (sync or
+// Resolves the leaf via [DefaultArgsParser.parse], invokes its handler (sync or
 // async), and translates the outcome into a process exit code. On parse
 // errors a short message is written to [err] followed by help text. On
 // handler exceptions the exception is written to [err]; the stack trace is
@@ -28,15 +28,12 @@ typedef WriteLn = void Function(String line);
 // handler).
 class ArgsRunner {
   final MetaArgs meta;
-  final ArgsParser parser;
-  final WriteLn _err;
+  final _WriteLn _err;
 
-  ArgsRunner(this.meta, {ArgsParser? parser, WriteLn? err})
-    : parser = parser ?? DefaultArgsParser(),
-      _err = err ?? _stderrLn;
+  ArgsRunner(this.meta, {void Function(String)? err}) : _err = err ?? _stderrLn;
 
   Future<int> run(List<String> argv) async {
-    final r = parser.parse(meta, argv);
+    final r = DefaultArgsParser().parse(meta, argv);
     switch (r) {
       case Ok<Cmd, ParseError>(:final v):
         try {
